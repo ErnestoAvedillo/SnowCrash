@@ -16,7 +16,7 @@ find / -user flag00 2>/dev/null
 ```
 
 Para encontrar el siguiente nivel he hecho un find / -user flag00 2>/dev/null
-conel que me salen los siguientes ficheros
+con el que me salen los siguientes ficheros
 
 ```bash
 ll /rofs/usr/sbin/john
